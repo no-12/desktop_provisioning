@@ -1,0 +1,8 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - blueman
+      - pulseaudio-module-bluetooth
+    update_cache: true

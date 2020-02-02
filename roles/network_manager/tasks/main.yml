@@ -1,0 +1,15 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - network-manager
+      - network-manager-gnome
+    update_cache: true
+
+- name: Ensure config is present
+  become: true
+  copy:
+    src: NetworkManager.conf
+    dest: /etc/NetworkManager/NetworkManager.conf
+    mode: 0644

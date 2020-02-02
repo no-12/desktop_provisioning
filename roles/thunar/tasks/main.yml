@@ -1,0 +1,10 @@
+---
+- name: Ensure packages are present
+  apt:
+    name:
+      - thunar
+      - gvfs
+      - gvfs-backends
+      - gvfs-bin
+      - gvfs-fuse
+  become: true

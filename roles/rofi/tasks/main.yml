@@ -1,0 +1,40 @@
+---
+- name: Ensure greenclip binary is present
+  become: true
+  get_url:
+    url: https://github.com/erebe/greenclip/releases/download/3.2/greenclip
+    dest: /usr/local/bin/greenclip
+    mode: 0755
+  notify: restart greenclip.service
+
+- name: Ensure greenclip config file is present
+  copy:
+    src: greenclip.cfg
+    dest: "{{ ansible_env.HOME }}/.config/greenclip.cfg"
+    mode: 0644
+  notify: restart greenclip.service
+
+- name: Ensure greenclip service file is present
+  become: true
+  copy:
+    src: greenclip.service
+    dest: /etc/systemd/user/greenclip.service
+    mode: 0644
+  notify: restart greenclip.service
+
+- name: Ensure rofi package is present
+  become: true
+  apt:
+    name: rofi
+
+- name: Ensures rofi config dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/rofi"
+    state: directory
+    recurse: yes
+
+- name: Ensure rofi config file is present
+  copy:
+    src: config.rasi
+    dest: "{{ ansible_env.HOME }}/.config/rofi/config.rasi"
+    mode: 0644

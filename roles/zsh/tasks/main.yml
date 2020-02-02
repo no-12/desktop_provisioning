@@ -1,0 +1,18 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - zsh
+    update_cache: true
+
+- name: Ensure oh my zsh is present
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+  args:
+    creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+
+- name: Ensure .zshrc file exists
+  template:
+    src: .zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    mode: 0644

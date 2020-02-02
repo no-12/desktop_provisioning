@@ -1,0 +1,8 @@
+---
+- name: Ensure timeout is set
+  become: true
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_TIMEOUT='
+    line: GRUB_TIMEOUT=2
+  notify: update grub

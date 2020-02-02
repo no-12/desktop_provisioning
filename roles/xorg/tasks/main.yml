@@ -1,0 +1,41 @@
+---
+- name: Ensure packages are present
+  become: true
+  apt:
+    name:
+      - xorg
+      - xbacklight
+      - xss-lock
+    update_cache: true
+
+- name: Ensures .Xresources.d dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/.Xresources.d"
+    state: directory
+    recurse: yes
+
+- name: Ensure colors file is present
+  copy:
+    src: colors
+    dest: "{{ ansible_env.HOME }}/.Xresources.d/colors"
+    mode: 0644
+
+- name: Ensure colors will be included in .Xresources
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.Xresources"
+    line: '#include ".Xresources.d/colors"'
+    create: yes
+    mode: 0644
+
+- name: Ensure .xinitrc is present
+  copy:
+    src: .xinitrc
+    dest: "{{ ansible_env.HOME }}/.xinitrc"
+    mode: 0644
+
+- name: Ensure xorg.conf file exists
+  template:
+    src: xorg.conf
+    dest: /etc/X11/xorg.conf
+    mode: 0644
+  become: true

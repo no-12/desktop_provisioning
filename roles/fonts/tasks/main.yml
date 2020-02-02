@@ -1,0 +1,52 @@
+---
+- name: Check if Font Awesome is present
+  shell: "fc-list | grep 'Font Awesome'"
+  register: font_awesome_is_present
+  changed_when: font_awesome_is_present.rc == 1
+  failed_when: font_awesome_is_present.rc >= 2
+
+- name: Ensure Font Awesome is present
+  block:
+    - name: Clone Font Awesome repo
+      git:
+        repo: https://github.com/FortAwesome/Font-Awesome.git
+        dest: /tmp/font_awesome
+
+    - name: Install Font Awesome
+      copy:
+        src: "{{ item }}"
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts/"
+        mode: 0644
+        remote_src: yes
+      with_fileglob:
+        - "/tmp/font_awesome/otfs/*.otf"
+
+    - name: Remove Font Awesome repo
+      file:
+        path: /tmp/font_awesome
+        state: absent
+  when: font_awesome_is_present.rc == 1
+
+- name: Check if powerline fonts are present
+  shell: "fc-list | grep 'for Powerline'"
+  register: powerline_fonts_are_present
+  changed_when: powerline_fonts_are_present.rc == 1
+  failed_when: powerline_fonts_are_present.rc >= 2
+
+- name: Ensure powerline fonts are present
+  block:
+    - name: Clone powerline fonts repo
+      git:
+        repo: https://github.com/powerline/fonts.git
+        dest: /tmp/powerline_fonts
+
+    - name: Install powerline fonts
+      command: ./install.sh
+      args:
+        chdir: /tmp/powerline_fonts
+
+    - name: Remove powerline fonts repo
+      file:
+        path: /tmp/powerline_fonts
+        state: absent
+  when: powerline_fonts_are_present.rc == 1

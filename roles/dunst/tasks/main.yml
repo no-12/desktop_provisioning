@@ -1,0 +1,19 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - dunst
+    update_cache: true
+
+- name: Ensures config dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/dunst"
+    state: directory
+    recurse: yes
+
+- name: Ensure config is present
+  copy:
+    src: dunstrc
+    dest: "{{ ansible_env.HOME }}/.config/dunst/dunstrc"
+    mode: 0644

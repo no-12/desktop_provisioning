@@ -1,0 +1,26 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - i3blocks
+
+- name: Ensures i3blocks config dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/i3blocks/scripts"
+    state: directory
+    recurse: yes
+
+- name: Ensure i3blocks config file is present
+  copy:
+    src: i3blocks.conf
+    dest: "{{ ansible_env.HOME }}/.config/i3blocks/i3blocks.conf"
+    mode: 0644
+
+- name: Ensure i3blocks scripts are present
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.config/i3blocks/scripts/"
+    mode: 0744
+  with_fileglob:
+    - "scripts/*"

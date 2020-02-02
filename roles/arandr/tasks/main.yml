@@ -1,0 +1,6 @@
+---
+- name: Ensure package is present
+  apt:
+    name:
+      - arandr
+  become: true

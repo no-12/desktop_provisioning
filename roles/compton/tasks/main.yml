@@ -1,0 +1,14 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - compton
+
+- name: Ensure compton service file is present
+  become: true
+  copy:
+    src: compton.service
+    dest: /etc/systemd/user/compton.service
+    mode: 0644
+  notify: restart compton.service

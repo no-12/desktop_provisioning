@@ -1,0 +1,7 @@
+---
+- name: Ensure package is present
+  apt:
+    name:
+      - pulseaudio
+      - pavucontrol
+  become: true

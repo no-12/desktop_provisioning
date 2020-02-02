@@ -1,0 +1,258 @@
+set $mod Mod4
+
+set $locker loginctl lock-session
+
+# define colors from Xresources
+set_from_resource $darkblack   color0  #000000
+set_from_resource $black       color8  #000000
+set_from_resource $darkred     color1  #000000
+set_from_resource $red         color9  #000000
+set_from_resource $darkgreen   color2  #000000
+set_from_resource $green       color10 #000000
+set_from_resource $darkyellow  color3  #000000
+set_from_resource $yellow      color11 #000000
+set_from_resource $darkblue    color4  #000000
+set_from_resource $blue        color12 #000000
+set_from_resource $darkmagenta color5  #000000
+set_from_resource $magenta     color13 #000000
+set_from_resource $darkcyan    color6  #000000
+set_from_resource $cyan        color14 #000000
+set_from_resource $darkwhite   color7  #000000
+set_from_resource $white       color15 #000000
+
+# define workspaces
+set $ws_web_browser "1: "
+set $ws_terminal "2: "
+set $ws_code "3: "
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws_system "10: "
+
+font pango: Roboto Mono 10
+
+hide_edge_borders both
+
+# window colors
+#                       border      background  text        indicator
+client.focused          $darkblack  $darkblack  $white      $cyan
+client.unfocused        $darkblack  $darkblack  $darkwhite  $cyan
+client.focused_inactive $darkblack  $darkblack  $darkwhite  $cyan
+client.urgent           $red        $red        $white      $cyan
+
+client.background $darkblack
+
+bar {
+    status_command i3blocks -c ~/.config/i3blocks/i3blocks.conf
+    colors {
+        background  $darkblack
+        separator   $darkwhite
+        statusline  $white
+        #                   border      background  text
+        focused_workspace   $white      $darkblack  $white
+        inactive_workspace  $darkblack  $darkblack  $darkwhite
+        urgent_workspace    $red        $red        $white
+    }
+}
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec i3-sensible-terminal, workspace $ws_terminal
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+bindsym $mod+Shift+a focus child
+
+# focus latest urgent
+bindsym $mod+u [urgent=latest] focus
+
+# flip through workspaces
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+
+# switch to workspace
+bindsym $mod+1 workspace $ws_web_browser
+bindsym $mod+2 workspace $ws_terminal
+bindsym $mod+3 workspace $ws_code
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws_system
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws_web_browser
+bindsym $mod+Shift+2 move container to workspace $ws_terminal
+bindsym $mod+Shift+3 move container to workspace $ws_code
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws_system
+
+# move workspace to different output
+bindsym $mod+Shift+o move workspace to output left
+bindsym $mod+Shift+p move workspace to output right
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q -D pulse sset Master 5%+ unmute && pkill -RTMIN+10 i3blocks
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q -D pulse sset Master 5%- unmute && pkill -RTMIN+10 i3blocks
+bindsym XF86AudioMute exec --no-startup-id amixer -q -D pulse sset Master toggle && pkill -RTMIN+10 i3blocks
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# rofi
+bindsym $mod+d exec rofi -show drun
+bindsym $mod+z exec rofi -show clipboard -run-command '{cmd}'
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# lock
+bindsym $mod+shift+x exec $locker
+
+set $mode_system (x) lock, (l) logout, (d) suspend, (h) hibernate, (r) reboot, (s) shutdown
+mode "$mode_system" {
+    bindsym x exec --no-startup-id $locker, mode "default"
+    bindsym l exec --no-startup-id i3-msg exit, mode "default"
+    bindsym d exec --no-startup-id systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym s exec --no-startup-id systemctl poweroff -i, mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+Shift+e mode "default"
+}
+bindsym $mod+Shift+e mode "$mode_system"
+
+set $mode_display Monitors (1..3) toggle, (m) mirror, (p) switch primary
+mode "$mode_display" {
+    bindsym m exec --no-startup-id ~/.config/i3/scripts/monitor.sh mirror, mode "default"
+    bindsym p exec --no-startup-id ~/.config/i3/scripts/monitor.sh switch_primary, mode "default"
+
+    bindsym 1 exec --no-startup-id ~/.config/i3/scripts/monitor.sh toggle 1, mode "default"
+    bindsym 2 exec --no-startup-id ~/.config/i3/scripts/monitor.sh toggle 2, mode "default"
+    bindsym 3 exec --no-startup-id ~/.config/i3/scripts/monitor.sh toggle 3, mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+m mode "default"
+}
+bindsym $mod+m mode "$mode_display", exec --no-startup-id ~/.config/i3/scripts/xrandr_list.sh
+
+mode "Resize" {
+    bindsym j resize shrink width 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym l resize shrink height 10 px or 10 ppt
+    bindsym semicolon resize grow width 10 px or 10 ppt
+
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "Resize"
+
+mode "Applications" {
+    bindsym s exec pavucontrol, mode "default", workspace $ws_system
+    bindsym n exec nm-connection-editor, mode "default", workspace $ws_system
+    bindsym m exec arandr, mode "default", workspace $ws_system
+
+    bindsym b exec google-chrome chrome-search://local-ntp/local-ntp.html, mode "default", workspace $ws_web_browser
+    bindsym c exec code, mode "default", workspace $ws_code
+    bindsym f exec thunar, mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+x mode "default"
+}
+bindsym $mod+x mode "Applications"
+
+
+assign [class="Google-chrome"] $ws_web_browser
+assign [class="URxvt"] $ws_terminal
+assign [class="Code"] $ws_code
+assign [class="Pavucontrol"] $ws_system
+assign [class="Nm-connection-editor"] $ws_system
+assign [class="Arandr"] $ws_system
+
+
+exec_always --no-startup-id systemctl --user restart compton
+
+exec --no-startup-id xss-lock blurlock
+exec --no-startup-id blueman-applet
+exec --no-startup-id nm-applet

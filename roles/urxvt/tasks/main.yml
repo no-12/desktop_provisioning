@@ -1,0 +1,20 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - rxvt-unicode
+    update_cache: true
+
+- name: Ensure config file is present
+  copy:
+    src: urxvt
+    dest: "{{ ansible_env.HOME }}/.Xresources.d/urxvt"
+    mode: 0644
+
+- name: Ensure config will be included in .Xresources
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.Xresources"
+    line: '#include ".Xresources.d/urxvt"'
+    create: yes
+    mode: 0644

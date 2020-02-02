@@ -1,0 +1,8 @@
+---
+- name: restart compton.service
+  systemd:
+    name: compton
+    scope: user
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

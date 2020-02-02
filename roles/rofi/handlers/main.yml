@@ -1,0 +1,8 @@
+---
+- name: restart greenclip.service
+  systemd:
+    name: greenclip
+    scope: user
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

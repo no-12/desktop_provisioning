@@ -1,0 +1,34 @@
+---
+- name: Ensure packages are present
+  become: true
+  apt:
+    name:
+      - i3
+      - playerctl
+      - libnotify-bin
+
+- name: Ensures i3 config dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/i3"
+    state: directory
+    recurse: yes
+
+- name: Ensure i3 config file is present
+  copy:
+    src: config
+    dest: "{{ ansible_env.HOME }}/.config/i3/config"
+    mode: 0644
+
+- name: Ensures i3 scripts dir exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/i3/scripts"
+    state: directory
+    recurse: yes
+
+- name: Ensure i3blocks scripts are present
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.config/i3/scripts/"
+    mode: 0744
+  with_fileglob:
+    - "scripts/*"

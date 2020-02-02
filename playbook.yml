@@ -1,0 +1,54 @@
+---
+- hosts: all
+  vars:
+    ansible_connection: local
+  pre_tasks:
+    - name: Ensure keyboard is configured
+      become: true
+      copy:
+        src: keyboard
+        dest: /etc/default/keyboard
+        mode: 0644
+
+    - name: Ensure additional repositiories are present
+      become: true
+      apt_repository:
+        repo: "{{ item }}"
+      with_items:
+        - deb http://deb.debian.org/debian/ buster contrib non-free
+        - deb-src http://deb.debian.org/debian/ buster contrib non-free
+        - deb http://security.debian.org/debian-security buster/updates contrib non-free
+        - deb-src http://security.debian.org/debian-security buster/updates contrib non-free
+        - deb http://deb.debian.org/debian/ buster-updates contrib non-free
+        - deb-src http://deb.debian.org/debian/ buster-updates contrib non-free
+
+    - name: Ensure common packages are present
+      become: true
+      apt:
+        name:
+          - curl
+          - git
+          - htop
+          - vim
+        update_cache: true
+
+  roles:
+    - grub
+    - xorg
+    - lightdm
+    - i3
+    - i3lock
+    - i3blocks
+    - compton
+    - rofi
+    - dunst
+    - arandr
+    - network_manager
+    - pulseaudio
+    - blueman
+    - urxvt
+    - zsh
+    - thunar
+    - google-chrome
+    - vscode
+    - fonts

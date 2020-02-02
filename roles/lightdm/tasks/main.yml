@@ -1,0 +1,16 @@
+---
+- name: Ensure package is present
+  apt:
+    name:
+      - lightdm
+  become: true
+
+- name: Ensure config files are present
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/lightdm/{{ item }}"
+    mode: 0644
+  become: true
+  with_items:
+    - lightdm.conf
+    - lightdm-gtk-greeter.conf

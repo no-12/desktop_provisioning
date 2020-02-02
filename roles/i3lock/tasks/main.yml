@@ -1,0 +1,15 @@
+---
+- name: Ensure package is present
+  become: true
+  apt:
+    name:
+      - i3lock
+      - scrot
+      - imagemagick
+
+- name: Ensure blurlock file is present
+  become: true
+  copy:
+    src: blurlock
+    dest: /usr/bin/blurlock
+    mode: 0755
